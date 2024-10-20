@@ -42,8 +42,8 @@ jobs:
       - name: Build and Push Docker image for api-gateway
         working-directory: api-gateway
         run: |
-          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/autochoice:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   # another-module-build:
   #   if: "contains(github.event.head_commit.message, 'another-module')"  # Run if commit message contains 'another-module'
