@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: Auth Service API
+  version: 1.0.0
+  description: API for user registration and JWT-based authentication
+servers:
+  - url: http://localhost:8001
+tags:
+  - name: Auth Service
+    description: User Registration & Login
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth Service
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+        '400':
+          description: Username already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Username already exists
+  /auth/token:
+    post:
+      tags:
+        - Auth Service
+      summary: Generate authentication token
+      operationId: loginForAccessToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthUser'
+      responses:
+        '200':
+          description: Successful authentication and token generation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Invalid credentials
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - password
+        - email
+      properties:
+        username:
+          type: string
+          example: your_username
+        password:
+          type: string
+          example: your_password
+        email:
+          type: string
+          example: your_email@example.com
+    AuthUser:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: your_username
+        password:
+          type: string
+          example: your_password
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5b3VyX3VzZXJuYW1lIiwiZXhwIjoxNjEyNTU5NTk5fQ.K5w6WfOl_pYXTrj1WiylFo0zIhLR0lLbBdTYKl5Qw_0
+        token_type:
+          type: string
+          example: bearer
+  # securitySchemes:
+  #   bearerAuth:
+  #     type: http
+  #     scheme: bearer
+  #     bearerFormat: JWT
+# security:
+#   - bearerAuth: []
