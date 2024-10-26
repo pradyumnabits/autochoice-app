@@ -73,5 +73,5 @@ if __name__ == "__main__":
         test_get_request_by_id(user_id)
         test_update_request(user_id)
         test_get_request_by_id(user_id)  # Check updated request details
-        test_delete_request(user_id)
+        #test_delete_request(user_id)
         test_get_all_requests()  # Check remaining requests

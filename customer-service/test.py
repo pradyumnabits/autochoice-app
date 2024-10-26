@@ -1,5 +1,8 @@
 import requests
 import uuid
+from faker import Faker
+
+fake = Faker()
 
 BASE_URL = "http://localhost:8007/customers"
 
@@ -7,23 +10,23 @@ BASE_URL = "http://localhost:8007/customers"
 def generate_random_user_id():
     return str(uuid.uuid4())[:8]  # Generate a short alphanumeric userId
 
-# Test Data
-customer_data = {
-    "userId": generate_random_user_id(),  # Random alphanumeric customerId
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john.doe@example.com",
-    "phoneNumber": "123-456-7890",
-    "address": "123 Elm Street, Springfield, USA"
-}
+# Function to generate random customer data
+def generate_customer_data():
+    return {
+        "userId": generate_random_user_id(),
+        "firstName": fake.first_name(),
+        "lastName": fake.last_name(),
+        "email": fake.unique.email(),
+        "phoneNumber": fake.phone_number(),
+        "address": fake.address(),
+        "profileStatus": fake.random_element(elements=["Active", "Inactive", "Suspended"])
+    }
 
-updated_customer_data = {
-    "firstName": "John",
-    "lastName": "Smith",
-    "email": "john.smith@example.com",
-    "phoneNumber": "987-654-3210",
-    "address": "456 Oak Avenue, Springfield, USA"
-}
+# Test Data
+customer_data = generate_customer_data()
+
+# Updated data for testing the update operation with new random data
+updated_customer_data = generate_customer_data()
 
 def test_create_customer():
     print("\n--- Testing Create Customer API ---")

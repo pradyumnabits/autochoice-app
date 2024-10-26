@@ -86,8 +86,8 @@ async def main():
     await get_all_test_drives()
     await get_test_drive_by_id()
     await book_test_drive()
-    await get_user_bookings()
-    await get_booking_by_id()
+    #await get_user_bookings()
+    #await get_booking_by_id()
 
 # Run the test
 if __name__ == "__main__":

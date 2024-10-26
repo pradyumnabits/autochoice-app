@@ -17,6 +17,7 @@ db_directory = os.path.join(os.getcwd(), 'data')  # 'data' folder in the current
 os.makedirs(db_directory, exist_ok=True)  # Create the directory if it doesn't exist
 SQLALCHEMY_DATABASE_URL = f"sqlite:///{os.path.join(db_directory, 'test_drives_bookings.db')}"
 
+
 # Function to initialize the database
 def initialize_database():
     try:
@@ -49,8 +50,10 @@ def initialize_database():
     except Error as e:
         print(f"Error initializing database: {e}")
 
+
 # Call the function to initialize the database
 initialize_database()
+
 
 # ===========================
 # Pydantic Schemas
@@ -63,11 +66,13 @@ class TestDrive(BaseModel):
     time: str
     status: str
 
+
 class TestDriveBooking(BaseModel):
     vehicle_id: str
     user_id: str
     date: date
     time: str
+
 
 class Booking(BaseModel):
     id: int
@@ -77,10 +82,12 @@ class Booking(BaseModel):
     status: str
     transaction_id: str  # New field for transaction ID
 
+
 class BookingRequest(BaseModel):
     user_id: str
     vehicle_id: str
     transaction_id: str  # New field for transaction ID
+
 
 # ===========================
 # Database Access Functions
@@ -88,6 +95,7 @@ class BookingRequest(BaseModel):
 def get_db_connection():
     conn = sqlite3.connect(os.path.join(db_directory, 'test_drives_bookings.db'))
     return conn
+
 
 def get_all_test_drives():
     conn = get_db_connection()
@@ -97,13 +105,15 @@ def get_all_test_drives():
     conn.close()
     return test_drives
 
-def get_test_drive_by_id(test_drive_id: int):
+
+def get_test_drive_by_id1(test_drive_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM test_drives WHERE id = ?", (test_drive_id,))
     test_drive = cursor.fetchone()
     conn.close()
     return test_drive
+
 
 def create_test_drive(test_drive: TestDrive):
     conn = get_db_connection()
@@ -115,6 +125,7 @@ def create_test_drive(test_drive: TestDrive):
     conn.commit()
     conn.close()
 
+
 def get_user_bookings(user_id: str):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -123,7 +134,8 @@ def get_user_bookings(user_id: str):
     conn.close()
     return bookings
 
-def get_booking_by_id(booking_id: int):
+
+def get_booking_by_id1(booking_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM bookings WHERE id = ?", (booking_id,))
@@ -131,15 +143,18 @@ def get_booking_by_id(booking_id: int):
     conn.close()
     return booking
 
+
 def create_booking(booking: Booking):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO bookings (user_id, vehicle_id, booking_date, status, transaction_id) VALUES (?, ?, ?, ?, ?)",  # Include transaction ID in query
+        "INSERT INTO bookings (user_id, vehicle_id, booking_date, status, transaction_id) VALUES (?, ?, ?, ?, ?)",
+        # Include transaction ID in query
         (booking.user_id, booking.vehicle_id, booking.booking_date, booking.status, booking.transaction_id)
     )
     conn.commit()
     conn.close()
+
 
 # ===========================
 # Test Drives Endpoints
@@ -160,9 +175,10 @@ def get_test_drives(vehicle_id: Optional[str] = None, date: Optional[date] = Non
     ]
     return filtered_test_drives
 
+
 @app.get("/testdrives/{id}", response_model=TestDrive)
 def get_test_drive_by_id(id: int):
-    test_drive = get_test_drive_by_id(id)
+    test_drive = get_test_drive_by_id1(id)
     if test_drive is None:
         raise HTTPException(status_code=404, detail="Test drive not found")
     return {
@@ -173,6 +189,7 @@ def get_test_drive_by_id(id: int):
         "time": test_drive[4],
         "status": test_drive[5]
     }
+
 
 @app.post("/testdrives/book", response_model=TestDrive, status_code=201)
 def book_test_drive(booking: TestDriveBooking):
@@ -186,6 +203,7 @@ def book_test_drive(booking: TestDriveBooking):
     )
     create_test_drive(new_test_drive)
     return new_test_drive
+
 
 # ===========================
 # Bookings Endpoints
@@ -202,9 +220,10 @@ def get_bookings(user_id: str):
         "transaction_id": booking[5]  # Include transaction ID in response
     } for booking in user_bookings]
 
+
 @app.get("/bookings/{id}", response_model=Booking)
 def get_booking_by_id(id: int):
-    booking = get_booking_by_id(id)
+    booking = get_booking_by_id1(id)
     if booking is None:
         raise HTTPException(status_code=404, detail="Booking not found")
     return {
@@ -215,6 +234,7 @@ def get_booking_by_id(id: int):
         "status": booking[4],
         "transaction_id": booking[5]  # Include transaction ID in response
     }
+
 
 @app.post("/bookings", response_model=Booking, status_code=201)
 def book_vehicle(booking_request: BookingRequest):

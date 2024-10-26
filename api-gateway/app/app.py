@@ -70,7 +70,7 @@ async def forward_request(service_url: str, request: Request):
 async def register_user(request: Request):
     return await forward_request(AUTH_SERVICE_URL, request)
 
-@app.post("/auth/token")
+@app.post("/auth/login")
 async def login_for_access_token(request: Request):
     return await forward_request(AUTH_SERVICE_URL, request)
 
@@ -79,18 +79,83 @@ async def login_for_access_token(request: Request):
 async def get_all_customers(request: Request):
     return await forward_request(CUSTOMER_SERVICE_URL, request)
 
+
+@app.get("/customers/{customer_id}")
+async def get_customer_by_id(customer_id: str, request: Request):
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly
+        url = f"{CUSTOMER_SERVICE_URL}/customers/{customer_id}"
+        response = await client.get(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
+
+@app.delete("/customers/{customer_id}")
+async def delete_customer_by_id(customer_id: str, request: Request):
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly with DELETE method
+        url = f"{CUSTOMER_SERVICE_URL}/customers/{customer_id}"
+        response = await client.delete(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 204:  # No Content response for successful delete
+            return {"detail": "Customer deleted successfully"}
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
+
+
 @app.post("/customers")
 async def create_customer(request: Request):
     return await forward_request(CUSTOMER_SERVICE_URL, request)
 
 # Vehicle Service APIs
+@app.post("/vehicles")
+async def create_customer(request: Request):
+    return await forward_request(VEHICLE_SERVICE_URL, request)
+
 @app.get("/vehicles")
 async def get_vehicles(request: Request):
     return await forward_request(VEHICLE_SERVICE_URL, request)
 
 @app.get("/vehicles/{vehicle_id}")
 async def get_vehicle_by_id(vehicle_id: str, request: Request):
-    return await forward_request(f"{VEHICLE_SERVICE_URL}/vehicles/{vehicle_id}", request)
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly
+        url = f"{VEHICLE_SERVICE_URL}/vehicles/{vehicle_id}"
+        response = await client.get(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Customer not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
+# @app.put("/vehicles/{vehicle_id}")
+#
+# @app.delete("/vehicles/{vehicle_id}")
 
 # Booking Service APIs
 @app.get("/testdrives")
@@ -106,14 +171,38 @@ async def schedule_service(request: Request):
 async def get_service_history(request: Request):
     return await forward_request(POST_SALE_SERVICE_URL, request)
 
-# Roadside Assistance Service APIs
-@app.post("/rsa/request")
-async def request_roadside_assistance(request: Request):
-    return await forward_request(ROADSIDE_ASSISTANCE_URL, request)
+@app.get("/service/appointments")
+async def get_service_history(request: Request):
+    return await forward_request(POST_SALE_SERVICE_URL, request)
 
-@app.get("/rsa/status/{requestId}")
+# Roadside Assistance Service APIs
+@app.post("/rsa/requests")
+async def request_roadside_assistance(request: Request):
+    return await forward_request(f"{ROADSIDE_ASSISTANCE_URL}", request)
+
+@app.get("/rsa/requests")
 async def get_roadside_status(requestId: str, request: Request):
-    return await forward_request(f"{ROADSIDE_ASSISTANCE_URL}/rsa/status/{requestId}", request)
+    return await forward_request(f"{ROADSIDE_ASSISTANCE_URL}", request)
+
+@app.get("/rsa/requests/{requestId}")
+async def get_roadside_status(requestId: str, request: Request):
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly using GET method
+        url = f"{ROADSIDE_ASSISTANCE_URL}/rsa/requests/{requestId}"
+        response = await client.get(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Roadside request not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
 
 # Customer Feedback Service APIs
 @app.post("/feedback/submit")
@@ -122,4 +211,75 @@ async def submit_feedback(request: Request):
 
 @app.get("/feedback/{id}")
 async def get_feedback_by_id(id: str, request: Request):
-    return await forward_request(f"{CUSTOMER_FEEDBACK_URL}/feedback/{id}", request)
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly
+        url = f"{CUSTOMER_FEEDBACK_URL}/feedback/{id}"
+        response = await client.get(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Customer feedback not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
+
+
+# Booking Service APIs
+
+@app.post("/bookings")
+async def create_booking(request: Request):
+    return await forward_request(BOOKING_SERVICE_URL, request)
+
+@app.get("/bookings")
+async def get_all_bookings(request: Request):
+    return await forward_request(BOOKING_SERVICE_URL, request)
+
+@app.get("/bookings/{booking_id}")
+async def get_booking_by_id(booking_id: str, request: Request):
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly
+        url = f"{BOOKING_SERVICE_URL}/bookings/{booking_id}"
+        response = await client.get(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 200:
+            return response.json()
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Booking not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
+
+@app.put("/bookings/{booking_id}")
+async def update_booking(booking_id: str, request: Request):
+    return await forward_request(f"{BOOKING_SERVICE_URL}/bookings/{booking_id}", request)
+
+@app.delete("/bookings/{booking_id}")
+async def delete_booking(booking_id: str, request: Request):
+    async with httpx.AsyncClient() as client:
+        headers = dict(request.headers)
+
+        # Inject the trace context into the headers (adds traceparent for propagation)
+        inject(headers)
+
+        # Call the downstream service directly with DELETE method
+        url = f"{BOOKING_SERVICE_URL}/bookings/{booking_id}"
+        response = await client.delete(url, headers=headers)
+
+        # Check the response status and return the appropriate result
+        if response.status_code == 204:  # No Content response for successful delete
+            return {"detail": "Booking deleted successfully"}
+        elif response.status_code == 404:
+            raise HTTPException(status_code=404, detail="Booking not found")
+        else:
+            raise HTTPException(status_code=response.status_code, detail="Error from downstream service")
