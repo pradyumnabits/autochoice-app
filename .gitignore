@@ -17,7 +17,7 @@ api-gateway/.DS_Store
 #customer-feedback/data/customer_feedback.db
 #rsa-service/data/roadside_assistance.db
 #support-service/data/service_support.db
-#vehicle-mgmt-service/data/vehicles.db
+#vehicle-catalogue-service/data/vehicles.db
 #customer-service/data/customers*.db
 #auth-service/test.db
 
