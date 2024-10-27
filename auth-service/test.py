@@ -12,12 +12,20 @@ def test_register_user():
     username = fake.user_name()
     password = fake.password()
     email = fake.email()
+    first_name = fake.first_name()   # Generate a random first name
+    last_name = fake.last_name()     # Generate a random last name
+    phone_number = fake.phone_number()  # Generate a random phone number
+    address = fake.address()          # Generate a random address
 
     url = f"{BASE_URL}/auth/register"
     payload = {
         "username": username,
         "password": password,
-        "email": email
+        "email": email,
+        "firstName": first_name,
+        "lastName": last_name,
+        "phoneNumber": phone_number,
+        "address": address
     }
 
     response = requests.post(url, json=payload)
@@ -36,12 +44,20 @@ def test_login_user():
     username = fake.user_name()
     password = fake.password()
     email = fake.email()
+    first_name = fake.first_name()
+    last_name = fake.last_name()
+    phone_number = fake.phone_number()
+    address = fake.address()
 
     # First register the user to be able to login
     register_payload = {
         "username": username,
         "password": password,
-        "email": email
+        "email": email,
+        "firstName": first_name,
+        "lastName": last_name,
+        "phoneNumber": phone_number,
+        "address": address
     }
 
     # Register the user
@@ -61,8 +77,8 @@ def test_login_user():
 
     if response.status_code == 200:
         print("Login Test Passed:", response.json())
-        # Extract and print the token
-        token = response.json().get("token")  # Adjust based on your actual response structure
+        # Adjust based on your actual response structure
+        token = response.json().get("token")  # Ensure your login response includes a token
         print("Token:", token)
     elif response.status_code == 400:
         print("Login Test Failed - Invalid credentials:", response.json())

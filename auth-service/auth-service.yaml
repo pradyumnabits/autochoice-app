@@ -1,20 +1,12 @@
-openapi: 3.0.3
+openapi: 3.0.2
 info:
-  title: Auth Service API
+  title: User Authentication API
   version: 1.0.0
-  description: API for user registration and JWT-based authentication
-servers:
-  - url: http://localhost:8001
-tags:
-  - name: Auth Service
-    description: User Registration & Login
+  description: API for user registration and authentication with customer service integration
 paths:
   /auth/register:
     post:
-      tags:
-        - Auth Service
       summary: Register a new user
-      operationId: registerUser
       requestBody:
         required: true
         content:
@@ -22,18 +14,19 @@ paths:
             schema:
               $ref: '#/components/schemas/User'
       responses:
-        '200':
-          description: Successful registration
+        200:
+          description: User registered successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  msg:
                     type: string
-                    example: User registered successfully
-        '400':
-          description: Username already exists
+                  user:
+                    $ref: '#/components/schemas/User'
+        400:
+          description: Username already registered
           content:
             application/json:
               schema:
@@ -41,13 +34,10 @@ paths:
                 properties:
                   detail:
                     type: string
-                    example: Username already exists
-  /auth/token:
+
+  /auth/login:
     post:
-      tags:
-        - Auth Service
-      summary: Generate authentication token
-      operationId: loginForAccessToken
+      summary: Log in a user
       requestBody:
         required: true
         content:
@@ -55,14 +45,24 @@ paths:
             schema:
               $ref: '#/components/schemas/AuthUser'
       responses:
-        '200':
-          description: Successful authentication and token generation
+        200:
+          description: Login successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
-        '401':
-          description: Invalid credentials
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      email:
+                        type: string
+        400:
+          description: Invalid username or password
           content:
             application/json:
               schema:
@@ -70,50 +70,32 @@ paths:
                 properties:
                   detail:
                     type: string
-                    example: Invalid credentials
+
 components:
   schemas:
     User:
       type: object
-      required:
-        - username
-        - password
-        - email
       properties:
         username:
           type: string
-          example: your_username
-        password:
-          type: string
-          example: your_password
         email:
           type: string
-          example: your_email@example.com
+          format: email
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          type: string
+
     AuthUser:
       type: object
-      required:
-        - username
-        - password
       properties:
         username:
           type: string
-          example: your_username
         password:
           type: string
-          example: your_password
-    Token:
-      type: object
-      properties:
-        access_token:
-          type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5b3VyX3VzZXJuYW1lIiwiZXhwIjoxNjEyNTU5NTk5fQ.K5w6WfOl_pYXTrj1WiylFo0zIhLR0lLbBdTYKl5Qw_0
-        token_type:
-          type: string
-          example: bearer
-  # securitySchemes:
-  #   bearerAuth:
-  #     type: http
-  #     scheme: bearer
-  #     bearerFormat: JWT
-# security:
-#   - bearerAuth: []

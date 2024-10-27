@@ -21,6 +21,16 @@ ROADSIDE_ASSISTANCE_URL = "http://localhost:8005"
 CUSTOMER_FEEDBACK_URL = "http://localhost:8006"
 CUSTOMER_SERVICE_URL = "http://localhost:8007"
 
+# Base URLs of the microservices with Kubernetes Service names
+# AUTH_SERVICE_URL = "http://auth-service"
+# VEHICLE_SERVICE_URL = "http://vehicle-service"
+# BOOKING_SERVICE_URL = "http://booking-service"
+# POST_SALE_SERVICE_URL = "http://post-sale-service"
+# ROADSIDE_ASSISTANCE_URL = "http://roadside-assistance-service"
+# CUSTOMER_FEEDBACK_URL = "http://customer-feedback-service"
+# CUSTOMER_SERVICE_URL = "http://customer-service"
+
+
 # ===========================
 # OpenTelemetry and Jaeger Setup
 # ===========================
