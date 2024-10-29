@@ -10,6 +10,13 @@ sh ./start.sh
 cd latest/api-gateway
 sh ./start.sh
 
+cd latest/customer-service
+python test.py
+
+cd latest/api-gateway/test
+python customer-service-test.py
+
+
 #minikube k8s testing
 #Create images
 cd latest/customer-service
