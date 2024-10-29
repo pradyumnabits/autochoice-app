@@ -13,7 +13,7 @@ def generate_random_user_id():
 # Function to generate random customer data
 def generate_customer_data():
     return {
-        "userId": generate_random_user_id(),
+        "userName": generate_random_user_id(),
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
         "email": fake.unique.email(),

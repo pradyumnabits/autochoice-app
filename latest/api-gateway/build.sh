@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the image name and tag
-IMAGE_NAME="api-gateway"
+IMAGE_NAME="gateway-svc"
 IMAGE_TAG="latest"
 
 # Build the Docker image

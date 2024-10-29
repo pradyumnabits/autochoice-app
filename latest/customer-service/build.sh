@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the image name and tag
-IMAGE_NAME="customer-service"
+IMAGE_NAME="customer-svc"
 IMAGE_TAG="latest"
 
 # Build the Docker image

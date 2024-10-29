@@ -1,39 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-gateway
+  name: gateway-svc
   labels:
-    app: api-gateway
+    app: gateway-svc
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: api-gateway
+      app: gateway-svc
   template:
     metadata:
       labels:
-        app: api-gateway
+        app: gateway-svc
     spec:
       containers:
         - name: api-gateway
-          image: api-gateway:latest # Replace with your actual image
+          image: gateway-svc:latest # Replace with your actual image
           ports:
             - containerPort: 8000
           env:
             - name: AUTH_SERVICE_URL
-              value: "http://auth-service"
+              value: "http://auth-svc"
             - name: VEHICLE_SERVICE_URL
-              value: "http://vehicle-service"
+              value: "http://vehicle-svc"
             - name: BOOKING_SERVICE_URL
-              value: "http://booking-service"
+              value: "http://booking-svc"
             - name: POST_SALE_SERVICE_URL
-              value: "http://post-sale-service"
+              value: "http://post-sale-svc"
             - name: ROADSIDE_ASSISTANCE_URL
-              value: "http://roadside-assistance-service"
+              value: "http://roadside-assistance-svc"
             - name: CUSTOMER_FEEDBACK_URL
-              value: "http://customer-feedback-service"
+              value: "http://customer-feedback-svc"
             - name: CUSTOMER_SERVICE_URL
-              value: "http://customer-service"
+              value: "http://customer-svc"
           resources:
             requests:
               memory: "256Mi"
@@ -45,7 +45,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-gateway-service
+  name: gateway-svc
 spec:
   type: LoadBalancer
   ports:
@@ -53,4 +53,4 @@ spec:
       port: 80
       targetPort: 8000
   selector:
-    app: api-gateway
+    app: gateway-svc

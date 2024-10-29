@@ -1,11 +1,18 @@
 # Use an official Python image as a base
-FROM python:3.10-slim
+#FROM python:3.10-slim
+FROM python:3.10-alpine
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the requirements file into the container
 COPY requirements.txt .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_WARN_SCRIPT_LOCATION=0 \
+    PIP_PROGRESS_BAR=off
+
 
 # Install any dependencies specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt

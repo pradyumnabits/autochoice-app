@@ -1,13 +1,9 @@
 fastapi
 uvicorn
-python-jose
-passlib[bcrypt]
 pydantic
 requests
 sqlalchemy
-sqlite3
 psycopg2-binary
-PyJWT
 prometheus-fastapi-instrumentator
 prometheus-client
 opentelemetry-api
