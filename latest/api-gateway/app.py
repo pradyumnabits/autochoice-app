@@ -19,7 +19,7 @@ app = FastAPI()
 # POST_SALE_SERVICE_URL = "http://localhost:8004"
 # ROADSIDE_ASSISTANCE_URL = "http://localhost:8005"
 # CUSTOMER_FEEDBACK_URL = "http://localhost:8006"
-# CUSTOMER_SERVICE_URL = "http://localhost:8007"
+CUSTOMER_SERVICE_URL = "http://localhost:8007"
 
 # Base URLs of the microservices with Kubernetes Service names
 AUTH_SERVICE_URL = "http://auth-svc"
@@ -28,7 +28,7 @@ BOOKING_SERVICE_URL = "http://booking-svc"
 POST_SALE_SERVICE_URL = "http://post-sale-svc"
 ROADSIDE_ASSISTANCE_URL = "http://roadside-assistance-svc"
 CUSTOMER_FEEDBACK_URL = "http://customer-feedback-svc"
-CUSTOMER_SERVICE_URL = "http://customer-svc"
+#CUSTOMER_SERVICE_URL = "http://customer-svc"
 
 
 # ===========================

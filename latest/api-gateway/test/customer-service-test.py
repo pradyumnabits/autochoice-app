@@ -33,7 +33,7 @@ def test_create_customer():
     response = requests.post(BASE_URL, json=customer_data)
     print(f"Status Code: {response.status_code}")
     print(f"Response: {response.json()}")
-    return customer_data['userId']  # Return the generated userId for further testing
+    return customer_data['userName']  # Return the generated userId for further testing
 
 def test_get_customers():
     print("\n--- Testing Get All Customers API ---")
