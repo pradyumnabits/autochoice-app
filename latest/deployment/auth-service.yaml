@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-svc
+  template:
+    metadata:
+      labels:
+        app: auth-svc
+    spec:
+      containers:
+      - name: auth-svc
+        image: auth-svc:latest  # Updated to the auth-svc image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8001  # Updated to match the target port for auth-svc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-svc
+spec:
+  selector:
+    app: auth-svc
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8001  # Updated target port
+      nodePort: 30082   # Updated NodePort
+  type: NodePort

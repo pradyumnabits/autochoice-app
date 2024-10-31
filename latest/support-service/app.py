@@ -134,6 +134,10 @@ def get_all_service_appointments():
 # ===========================
 # Routing and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-support-svc"}
+
 @app.post("/service/schedule", status_code=201)
 def schedule_service(appointment: ServiceAppointment):
     create_service_appointment(appointment)

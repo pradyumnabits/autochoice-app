@@ -135,6 +135,10 @@ def update_request_funn(userid: str, data: UpdateRoadsideAssistanceRequest):
 # ===========================
 # Routing and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-rsa-svc"}
+
 @app.post("/rsa/requests", status_code=201)
 def request_roadside_assistance(request: RoadsideAssistanceRequest):
     request_id = create_request(request)

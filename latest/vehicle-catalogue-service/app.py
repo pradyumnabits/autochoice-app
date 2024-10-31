@@ -27,7 +27,7 @@ def initialize_database():
             cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS vehicles (
-                    id TEXT PRIMARY KEY NOT NULL,a
+                    id TEXT PRIMARY KEY NOT NULL,
                     make TEXT NOT NULL,
                     model TEXT NOT NULL,
                     year INTEGER NOT NULL,
@@ -37,7 +37,7 @@ def initialize_database():
                     body_type TEXT NOT NULL,
                     image_url TEXT
                 )
-            """
+                """
             )
             conn.commit()
             print("Database initialized successfully.")
@@ -143,6 +143,10 @@ def delete_vehicle(vehicle_id: str):
 # ===========================
 # Routing and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-vehicle-svc"}
+
 @app.get("/vehicles")
 def list_vehicles():
     vehicles = get_all_vehicles()

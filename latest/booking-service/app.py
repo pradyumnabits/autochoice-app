@@ -172,6 +172,10 @@ def update_customer_profile(user_name: str, status: str = "VEHICLE_OWNED"):  # U
         print(f"Failed to update customer profile status: {e}")
         return None
 
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-booking-svc"}
+
 # ===========================
 # Test Drives Endpoints
 # ===========================

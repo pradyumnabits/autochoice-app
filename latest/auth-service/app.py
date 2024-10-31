@@ -9,7 +9,7 @@ import requests
 # FastAPI app initialization
 app = FastAPI()
 
-CUSTOMER_SERVICE_URL = "http://localhost:8007/customers"
+CUSTOMER_SERVICE_URL = "http://localhost:8001"
 
 # ===========================
 # Database Setup
@@ -131,6 +131,10 @@ def create_customer(user: User):
 # ===========================
 # Routing and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-auth-svc"}
+
 @app.post("/auth/register")
 def register_user(user: User):
     user_data = create_user(user)

@@ -95,6 +95,10 @@ def get_feedback_by_id(feedback_id: str):
 # ===========================
 # Routes and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-feedback-svc"}
+
 @app.post("/feedback/submit", status_code=201, response_model=FeedbackResponse, responses={400: {"model": ErrorResponse}})
 def submit_feedback(feedback: FeedbackRequest):
     try:

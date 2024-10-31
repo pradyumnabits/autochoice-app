@@ -12,27 +12,27 @@ import httpx
 
 app = FastAPI()
 
-# Base URLs of the microservices
-# AUTH_SERVICE_URL = "http://localhost:8001"
-# VEHICLE_SERVICE_URL = "http://localhost:8002"
-# BOOKING_SERVICE_URL = "http://localhost:8003"
-# POST_SALE_SERVICE_URL = "http://localhost:8004"
-# ROADSIDE_ASSISTANCE_URL = "http://localhost:8005"
-# CUSTOMER_FEEDBACK_URL = "http://localhost:8006"
+#Base URLs of the microservices
+AUTH_SERVICE_URL = "http://localhost:8001"
+VEHICLE_SERVICE_URL = "http://localhost:8002"
+BOOKING_SERVICE_URL = "http://localhost:8003"
+POST_SALE_SERVICE_URL = "http://localhost:8004"
+ROADSIDE_ASSISTANCE_URL = "http://localhost:8005"
+CUSTOMER_FEEDBACK_URL = "http://localhost:8006"
 CUSTOMER_SERVICE_URL = "http://localhost:8007"
 
 # Base URLs of the microservices with Kubernetes Service names
-AUTH_SERVICE_URL = "http://auth-svc"
-VEHICLE_SERVICE_URL = "http://vehicle-svc"
-BOOKING_SERVICE_URL = "http://booking-svc"
-POST_SALE_SERVICE_URL = "http://post-sale-svc"
-ROADSIDE_ASSISTANCE_URL = "http://roadside-assistance-svc"
-CUSTOMER_FEEDBACK_URL = "http://customer-feedback-svc"
-#CUSTOMER_SERVICE_URL = "http://customer-svc"
+# AUTH_SERVICE_URL = "http://auth-svc"
+# VEHICLE_SERVICE_URL = "http://vehicle-svc"
+# BOOKING_SERVICE_URL = "http://booking-svc"
+# POST_SALE_SERVICE_URL = "http://support-svc"
+# ROADSIDE_ASSISTANCE_URL = "http://rsa-svc"
+# CUSTOMER_FEEDBACK_URL = "http://feedback-svc"
+# CUSTOMER_SERVICE_URL = "http://customer-svc"
 
 
 # ===========================
-# OpenTelemetry and Jaeger Setup
+# OpenTelemetry and Jaeger Setup`
 # ===========================
 def configure_opentelemetry():
     resource = Resource(attributes={
@@ -74,6 +74,40 @@ async def forward_request(service_url: str, request: Request):
             params=request.query_params if request.method == "GET" else None,
         )
         return response.json()
+
+#Ping APIs
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-gateway-svc"}
+
+# @app.get("/auth/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(CUSTOMER_SERVICE_URL, request)
+#
+# @app.get("/customers/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(CUSTOMER_SERVICE_URL, request)
+#
+# @app.get("/vehicles/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(VEHICLE_SERVICE_URL, request)
+#
+# @app.get("/bookings/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(BOOKING_SERVICE_URL, request)
+#
+# @app.get("/service/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(POST_SALE_SERVICE_URL, request)
+#
+# @app.get("/rsa/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(ROADSIDE_ASSISTANCE_URL, request)
+#
+# @app.get("/feedback/ping")
+# async def get_all_customers(request: Request):
+#     return await forward_request(CUSTOMER_FEEDBACK_URL, request)
+
 
 # Auth Service APIs
 @app.post("/auth/register")

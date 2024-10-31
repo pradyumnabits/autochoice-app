@@ -111,6 +111,10 @@ def update_customer_status(userName: str, status: str):
 # ===========================
 # Routing and Business Logic
 # ===========================
+@app.get("/ping")
+def ping():
+    return {"msg": "pong-customer-svc"}
+
 @app.get("/customers")
 def list_customers():
     customers = get_all_customers()

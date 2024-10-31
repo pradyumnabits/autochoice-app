@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gateway-svc
-  labels:
-    app: gateway-svc
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: gateway-svc
@@ -15,42 +13,23 @@ spec:
         app: gateway-svc
     spec:
       containers:
-        - name: api-gateway
-          image: gateway-svc:latest # Replace with your actual image
-          ports:
-            - containerPort: 8000
-          env:
-            - name: AUTH_SERVICE_URL
-              value: "http://auth-svc"
-            - name: VEHICLE_SERVICE_URL
-              value: "http://vehicle-svc"
-            - name: BOOKING_SERVICE_URL
-              value: "http://booking-svc"
-            - name: POST_SALE_SERVICE_URL
-              value: "http://post-sale-svc"
-            - name: ROADSIDE_ASSISTANCE_URL
-              value: "http://roadside-assistance-svc"
-            - name: CUSTOMER_FEEDBACK_URL
-              value: "http://customer-feedback-svc"
-            - name: CUSTOMER_SERVICE_URL
-              value: "http://customer-svc"
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "500m"
-            limits:
-              memory: "512Mi"
-              cpu: "1000m"
+      - name: gateway-svc
+        image: gateway-svc:latest  # Using the locally built image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: gateway-svc
 spec:
-  type: LoadBalancer
+  selector:
+    app: gateway-svc
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8000
-  selector:
-    app: gateway-svc
+      nodePort: 30081
+  type: NodePort
