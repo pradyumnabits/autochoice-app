@@ -58,7 +58,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest ${{ secrets.DOCKER_USERNAME }}/gatway-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -93,7 +93,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest ${{ secrets.DOCKER_USERNAME }}/auth-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -128,7 +128,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/customer-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/customer-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/customer-svc:latest ${{ secrets.DOCKER_USERNAME }}/customer-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -163,7 +163,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/vehicle-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/vehicle-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/vehicle-svc:latest ${{ secrets.DOCKER_USERNAME }}/vehicle-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -198,7 +198,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/booking-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/booking-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/booking-svc:latest ${{ secrets.DOCKER_USERNAME }}/booking-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -233,7 +233,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/support-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/support-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/support-svc:latest ${{ secrets.DOCKER_USERNAME }}/support-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -268,7 +268,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/rsa-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/rsa-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/rsa-svc:latest ${{ secrets.DOCKER_USERNAME }}/rsa-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
@@ -303,7 +303,7 @@ jobs:
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/feedback-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/feedback-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/feedback-svc:latest ${{ secrets.DOCKER_USERNAME }}/feedback-svc:latest
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
