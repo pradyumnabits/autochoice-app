@@ -6,48 +6,76 @@ on:
       - main
     paths:
       - 'gateway-service/**'
+      - 'auth-service/**'
+      - 'customer-service/**'
+      - 'vehicle-service/**'
+      - 'booking-service/**'
+      - 'support-service/**'
+      - 'rsa-service/**'
+      - 'feedback-service/**'
   pull_request:
     branches:
       - main
     paths:
       - 'gateway-service/**'
+      - 'auth-service/**'
+      - 'customer-service/**'
+      - 'vehicle-service/**'
+      - 'booking-service/**'
+      - 'support-service/**'
+      - 'rsa-service/**'
+      - 'feedback-service/**'
   workflow_dispatch:
 
 jobs:
-  api-gateway-build:
-    if: "contains(github.event.head_commit.message, 'gateway-service')"  # Run if commit message contains 'gateway-service'
+  build-services:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - gateway-service
+          - auth-service
+          - customer-service
+          - vehicle-service
+          - booking-service
+          - support-service
+          - rsa-service
+          - feedback-service
 
     steps:
+      # Step 1: Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python for gateway-service
+      # Step 2: Set up Python environment for the service
+      - name: Set up Python for ${{ matrix.service }}
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
 
-      - name: Install dependencies for gateway-service
-        working-directory: gateway-service  # Ensure we are in the correct directory
+      # Step 3: Install the required dependencies for the service
+      - name: Install dependencies for ${{ matrix.service }}
+        working-directory: ${{ matrix.service }}  # Ensure we are in the correct directory
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip  # Upgrade pip to the latest version
+          pip install -r requirements.txt  # Install the dependencies listed in requirements.txt
 
+      # Step 4: Log in to Docker Hub using secrets for authentication
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username stored in secrets
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password stored in secrets
 
-      # Build the Docker image
-      - name: Build Docker image
-        working-directory: gateway-service  # Specify working directory for Dockerfile
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
+      # Step 5: Build the Docker image for the service
+      - name: Build Docker image for ${{ matrix.service }}
+        working-directory: ${{ matrix.service }}  # Specify working directory for Dockerfile
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/${{ matrix.service }}:latest
 
-      # Tagging the Docker image
-      - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
+      # Step 6: Tag the Docker image for versioning
+      - name: Tag Docker image for ${{ matrix.service }}
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/${{ matrix.service }}:latest ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
-      # Pushing the tagged Docker image to Docker Hub
-      - name: Push Docker image
+      # Step 7: Push the tagged Docker image to Docker Hub
+      - name: Push Docker image for ${{ matrix.service }}
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
