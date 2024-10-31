@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-svc
+  namespace: autohub  # Specify the namespace
+  labels:
+    app: gateway-svc
+spec:
+  replicas: 2  # Number of replicas for scalability; adjust as needed
+  selector:
+    matchLabels:
+      app: gateway-svc
+  template:
+    metadata:
+      labels:
+        app: gateway-svc
+    spec:
+      containers:
+      - name: gateway-svc-container
+        image: qlikstar/gateway-svc:0.1
+        ports:
+        - containerPort: 8000  # Port exposed by the FastAPI app
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-svc-service
+  namespace: autohub  # Specify the namespace
+  labels:
+    app: gateway-svc
+spec:
+  type: NodePort  # Expose the service as NodePort for external access
+  ports:
+  - port: 8000             # Internal port for the service
+    targetPort: 8000       # Port where FastAPI is running
+    nodePort: 30081        # NodePort for external access; pick a port in the range 30000-32767
+  selector:
+    app: gateway-svc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: autohub-app
+  namespace: autohub  # Specify the namespace
+  labels:
+    app: gateway-svc
+spec:
+  type: LoadBalancer  # Create a LoadBalancer for external access
+  ports:
+    - port: 80         # External port
+      targetPort: 8000 # Port your app listens on in the container
+  selector:
+    app: gateway-svc
