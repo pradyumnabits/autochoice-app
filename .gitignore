@@ -14,10 +14,10 @@ __pycache__/
 api-gateway/.DS_Store
 **/*.db
 #booking-service/data/test_drives_bookings.db
-#customer-feedback/data/customer_feedback.db
+#feedback-service/data/customer_feedback.db
 #rsa-service/data/roadside_assistance.db
 #support-service/data/service_support.db
-#vehicle-catalogue-service/data/vehicles.db
+#vehicle-service/data/vehicles.db
 #customer-service/data/customers*.db
 #auth-service/test.db
 

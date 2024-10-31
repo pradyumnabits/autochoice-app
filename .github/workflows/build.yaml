@@ -5,30 +5,30 @@ on:
     branches:
       - main
     paths:
-      - 'api-gateway/**'
+      - 'gateway-service/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'api-gateway/**'
+      - 'gateway-service/**'
   workflow_dispatch:
 
 jobs:
   api-gateway-build:
-    if: "contains(github.event.head_commit.message, 'api-gateway')"  # Run if commit message contains 'api-gateway'
+    if: "contains(github.event.head_commit.message, 'gateway-service')"  # Run if commit message contains 'gateway-service'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python for api-gateway
+      - name: Set up Python for gateway-service
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
 
-      - name: Install dependencies for api-gateway
-        working-directory: api-gateway  # Ensure we are in the correct directory
+      - name: Install dependencies for gateway-service
+        working-directory: gateway-service  # Ensure we are in the correct directory
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -41,7 +41,7 @@ jobs:
 
       # Build the Docker image
       - name: Build Docker image
-        working-directory: api-gateway  # Specify working directory for Dockerfile
+        working-directory: gateway-service  # Specify working directory for Dockerfile
         run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
 
       # Tagging the Docker image
