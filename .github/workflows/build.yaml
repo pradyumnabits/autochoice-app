@@ -90,13 +90,13 @@ jobs:
 
       - name: Build Docker image
         working-directory: latest/auth-service
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest ${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice/auth-svc:latest
 
   customer-service-build:
     if: "contains(github.event.head_commit.message, 'customer-service')"
