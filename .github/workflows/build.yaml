@@ -100,13 +100,13 @@ jobs:
 
       - name: Update Kubernetes manifest
         run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/auth-service.yaml
+          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/auth-service.yaml
 
       - name: Commit and push updated manifest
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
-          git add latest/deployment/auth-service.yaml
+          git add latest/deployment/dev/auth-service.yaml
           git commit -m "Update auth-service image to latest version"
           git push
         env:
