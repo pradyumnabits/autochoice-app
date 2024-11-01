@@ -101,6 +101,8 @@ jobs:
       - name: Update Kubernetes manifest
         run: |
           sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/auth-service.yaml
+         
+          echo "# Updated at $(date)" >> latest/deployment/dev/auth-service.yaml
 
       - name: Commit and push updated manifest
         run: |

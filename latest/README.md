@@ -72,4 +72,43 @@ sh feedback-service/build.sh
 
 
 
+# ArgoCD
 
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+cd latest/deployment
+kubectl apply -f application.yaml
+
+## Issues
+kubectl edit deployment argocd-repo-server -n argocd
+This will open the deployment configuration in your editor. Locate the env section under the argocd-repo-server container and add the ARGOCD_GPG_ENABLED variable like this:
+spec:
+  containers:
+  - name: argocd-repo-server
+    env:
+    - name: ARGOCD_GPG_ENABLED
+      value: "false"
+
+kubectl rollout restart deployment argocd-repo-server -n argocd
+kubectl logs -l app.kubernetes.io/name=argocd-repo-server -n argocd
+
+
+# check for the argocd-server svc & port forward to access the UI
+kubectl get svc -n argocd 
+
+=> kubectl port-forward svc/argocd-server -n argocd 8080:80
+=> kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+=> kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode
+
+
+kubectl -n kube-system edit configmap coredns
+forward . /etc/resolv.conf {
+    max_concurrent 1000
+}
+forward . 8.8.8.8 8.8.4.4 {
+    max_concurrent 1000
+}
+kubectl -n kube-system rollout restart deployment coredns
+kubectl run dns-check --rm -it --image=busybox --restart=Never -- nslookup github.com
