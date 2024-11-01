@@ -55,29 +55,13 @@ jobs:
 
       - name: Build Docker image
         working-directory: latest/gateway-service
-        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/gateway-svc:latest
+        run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest
 
       - name: Tag Docker image
-        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest ${{ secrets.DOCKER_USERNAME }}/gateway-svc:latest
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/gateway-svc:latest ${{ secrets.DOCKER_USERNAME }}/gatway-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/gateway-svc:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/gateway-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/gateway-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/gateway-service.yaml
-          git commit -m "Update gateway-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   auth-service-build:
     if: "contains(github.event.head_commit.message, 'auth-service')"
@@ -165,22 +149,6 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/customer-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/customer-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/customer-service.yaml
-          git commit -m "Update customer-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   vehicle-service-build:
     if: "contains(github.event.head_commit.message, 'vehicle-service')"
     runs-on: ubuntu-latest
@@ -214,23 +182,7 @@ jobs:
         run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/vehicle-svc:latest ${{ secrets.DOCKER_USERNAME }}/vehicle-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/vehicle-svc:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/vehicle-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/vehicle-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/vehicle-service.yaml
-          git commit -m "Update vehicle-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   booking-service-build:
     if: "contains(github.event.head_commit.message, 'booking-service')"
@@ -265,23 +217,7 @@ jobs:
         run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/booking-svc:latest ${{ secrets.DOCKER_USERNAME }}/booking-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/booking-svc:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/booking-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/booking-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/booking-service.yaml
-          git commit -m "Update booking-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   support-service-build:
     if: "contains(github.event.head_commit.message, 'support-service')"
@@ -316,23 +252,7 @@ jobs:
         run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/support-svc:latest ${{ secrets.DOCKER_USERNAME }}/support-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/support-svc:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/support-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/support-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/support-service.yaml
-          git commit -m "Update support-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   rsa-service-build:
     if: "contains(github.event.head_commit.message, 'rsa-service')"
@@ -367,23 +287,7 @@ jobs:
         run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/rsa-svc:latest ${{ secrets.DOCKER_USERNAME }}/rsa-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/rsa:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/rsa-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/rsa-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/rsa-service.yaml
-          git commit -m "Update rsa-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
 
   feedback-service-build:
     if: "contains(github.event.head_commit.message, 'feedback-service')"
@@ -418,20 +322,4 @@ jobs:
         run: docker tag ${{ secrets.DOCKER_USERNAME }}/autochoice/feedback-svc:latest ${{ secrets.DOCKER_USERNAME }}/feedback-svc:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/feedback-svc:latest
-
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i 's|image: .*|image: '"${{ secrets.DOCKER_USERNAME }}/ah-auth-svc:latest"'|' latest/deployment/dev/feedback-service.yaml
-
-          echo "# Updated at $(date)" >> latest/deployment/dev/feedback-service.yaml
-
-      - name: Commit and push updated manifest
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "github-actions@github.com"
-          git add latest/deployment/dev/feedback-service.yaml
-          git commit -m "Update feedback-service image to latest version"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/autochoice:latest
