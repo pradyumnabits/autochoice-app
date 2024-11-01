@@ -17,7 +17,7 @@ spec:
         image: pradyumnakmbits/ah-auth-svc:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 8001  # Updated to match the target port for auth-svc
+        - containerPort: 8001  # Updated to match the target port for auth-svc ms
 
 ---
 apiVersion: v1
