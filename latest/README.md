@@ -112,3 +112,6 @@ forward . 8.8.8.8 8.8.4.4 {
 }
 kubectl -n kube-system rollout restart deployment coredns
 kubectl run dns-check --rm -it --image=busybox --restart=Never -- nslookup github.com
+
+
+# Docker Hub - https://hub.docker.com/repositories/pradyumnakmbits

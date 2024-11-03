@@ -4,7 +4,7 @@ from faker import Faker
 
 fake = Faker()
 
-BASE_URL = "http://localhost:30081/customers"
+BASE_URL = "http://localhost:8000/customers"
 
 # Function to generate a random alphanumeric userId
 def generate_random_user_id():
